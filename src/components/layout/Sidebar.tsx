@@ -5,10 +5,16 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 const navigation = [
     {
-        name: 'My Properties',
-        href: '/dashboard/properties',
+        name: 'Explore',
+        href: '/dashboard/explore',
         icon: '🏠',
     },
+    {
+        name: 'My Properties',
+        href: '/dashboard/properties',
+        icon: '🔗',
+    },
+
     {
         name: 'Investment Portfolio',
         href: '/dashboard/portfolio',

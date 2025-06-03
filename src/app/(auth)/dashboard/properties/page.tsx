@@ -1,219 +1,281 @@
-'use client';
-
-import { useState } from 'react';
-import { PropertyCard } from '@/components/properties/PropertyCard';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
-type PropertyStatus = 'available' | 'fractionalized';
-
-interface Property {
+interface Investment {
     id: number;
-    title: string;
+    name: string;
     location: string;
-    price: number;
-    type: string;
-    bedrooms: number;
-    bathrooms: number;
-    size: string;
-    dld: string;
-    status: PropertyStatus;
-    fractionalized: boolean;
-    sharesCreated?: number;
-    sharesOwned?: number;
-    image: string;
+    value: number;
+    ownership: number;
+    return: number;
+    monthlyIncome: number;
+    icon: string;
 }
 
-// Sample property data
-const userOwnedProperties: Property[] = [
+const investments: Investment[] = [
     {
         id: 1,
-        title: 'Marina Bay Apartment',
-        location: 'Dubai Marina',
-        price: 2800000,
-        type: 'Apartment',
-        bedrooms: 3,
-        bathrooms: 2,
-        size: '1,450 sqft',
-        dld: 'DLD-2024-001235',
-        status: 'available',
-        fractionalized: false,
-        image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&h=300&fit=crop&crop=center',
+        name: 'Burj Khalifa Residences',
+        location: 'Downtown Dubai',
+        value: 850000,
+        ownership: 25,
+        return: 15.2,
+        monthlyIncome: 6500,
+        icon: '🏢',
     },
     {
         id: 2,
-        title: 'City Walk Townhouse',
-        location: 'City Walk',
-        price: 4200000,
-        type: 'Townhouse',
-        bedrooms: 3,
-        bathrooms: 4,
-        size: '2,100 sqft',
-        dld: 'DLD-2024-001238',
-        status: 'fractionalized',
-        fractionalized: true,
-        sharesCreated: 50,
-        sharesOwned: 40,
-        image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&h=300&fit=crop&crop=center',
+        name: 'Marina Bay Towers',
+        location: 'Dubai Marina',
+        value: 420000,
+        ownership: 12,
+        return: 8.7,
+        monthlyIncome: 2800,
+        icon: '🏖️',
     },
     {
         id: 3,
-        title: 'DIFC Tower Apartment',
-        location: 'DIFC',
-        price: 1950000,
-        type: 'Apartment',
-        bedrooms: 1,
-        bathrooms: 2,
-        size: '850 sqft',
-        dld: 'DLD-2024-001239',
-        status: 'available',
-        fractionalized: false,
-        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500&h=300&fit=crop&crop=center',
-    },
-    {
-        id: 4,
-        title: 'Palm Jumeirah Villa',
+        name: 'Palm Villa Collection',
         location: 'Palm Jumeirah',
-        price: 8500000,
-        type: 'Villa',
-        bedrooms: 4,
-        bathrooms: 5,
-        size: '3,200 sqft',
-        dld: 'DLD-2024-001240',
-        status: 'available',
-        fractionalized: false,
-        image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500&h=300&fit=crop&crop=center',
+        value: 1180000,
+        ownership: 8,
+        return: 22.1,
+        monthlyIncome: 9200,
+        icon: '🌴',
     },
 ];
 
-export default function PropertiesPage() {
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [areaFilter, setAreaFilter] = useState<string>('');
-    const [typeFilter, setTypeFilter] = useState<string>('');
-    const [statusFilter, setStatusFilter] = useState<PropertyStatus | ''>('available');
+type TransactionType = 'buy' | 'sell' | 'transfer' | 'fractionalize';
+interface Transaction {
+    id: string;
+    type: TransactionType;
+    title: string;
+    description: string;
+    amount: string;
+    timestamp: string;
+    transactionId: string;
+}
+const transactions: Transaction[] = [
+    {
+        id: '1',
+        type: 'buy',
+        title: 'Purchased 25% of Burj Khalifa Residences',
+        description: 'Transaction ID: 0x1a2b3c4d...5e6f7g8h',
+        amount: 'AED 850,000',
+        timestamp: '2 hours ago',
+        transactionId: '0x1a2b3c4d...5e6f7g8h',
+    },
+    {
+        id: '2',
+        type: 'transfer',
+        title: 'Fractionalized Marina Bay Apartment',
+        description: 'Created 100 shares • Transaction ID: 0x2b3c4d5e...6f7g8h9i',
+        amount: '100 Shares',
+        timestamp: '1 day ago',
+        transactionId: '0x2b3c4d5e...6f7g8h9i',
+    },
+    {
+        id: '3',
+        type: 'buy',
+        title: 'Purchased 8% of Palm Villa Collection',
+        description: 'Transaction ID: 0x9a8b7c6d...1e2f3g4h',
+        amount: 'AED 1,180,000',
+        timestamp: '3 days ago',
+        transactionId: '0x9a8b7c6d...1e2f3g4h',
+    },
+    {
+        id: '4',
+        type: 'sell',
+        title: 'Sold 3% of JBR Penthouse',
+        description: 'Transaction ID: 0x5f4e3d2c...9h8g7f6e',
+        amount: 'AED 165,000',
+        timestamp: '1 week ago',
+        transactionId: '0x5f4e3d2c...9h8g7f6e',
+    },
+    {
+        id: '5',
+        type: 'transfer',
+        title: 'Fractionalized City Walk Townhouse',
+        description: 'Created 50 shares • Transaction ID: 0x3c4d5e6f...7g8h9i0j',
+        amount: '50 Shares',
+        timestamp: '2 weeks ago',
+        transactionId: '0x3c4d5e6f...7g8h9i0j',
+    },
+];
 
-    const filteredProperties = userOwnedProperties.filter((property) => {
-        const matchesSearch =
-            searchTerm === '' ||
-            property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            property.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            property.dld.toLowerCase().includes(searchTerm.toLowerCase());
-
-        const matchesArea =
-            areaFilter === '' || property.location.toLowerCase().includes(areaFilter.toLowerCase());
-
-        const matchesType =
-            typeFilter === '' || property.type.toLowerCase() === typeFilter.toLowerCase();
-
-        const matchesStatus = statusFilter === '' || property.status === statusFilter;
-
-        return matchesSearch && matchesArea && matchesType && matchesStatus;
-    });
-
-    // const handleFractionalize = (propertyId: number) => {
-    //     // Handle fractionalization
-    //     console.log('Fractionalize property:', propertyId);
-    // };
-
+export default async function PropertiesPage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">My Properties</h1>
+                <h1 className="text-3xl font-bold text-gray-900">Investment Portfolio</h1>
                 <p className="mt-2 text-gray-500">
-                    Fractionalize your owned properties from the Dubai Land Department registry
+                    Track your fractional property investments and returns
                 </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(4,1fr)] gap-6">
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">
+                        Fractionalized Properties
+                    </h3>
+                    <p className="text-3xl font-bold text-gray-900 mb-1">8</p>
+                    <p className="text-sm font-semibold text-green-600">+2 this month</p>
+                </Card>
+
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">Total Shares Sold</h3>
+                    <p className="text-3xl font-bold text-gray-900 mb-1">48</p>
+                    <p className="text-sm font-semibold text-green-600">+10 this month</p>
+                </Card>
+
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">Revenue Generated</h3>
+                    <p className="text-3xl font-bold text-gray-900 mb-1">AED 1,250,000</p>
+                    <p className="text-sm font-semibold text-green-600">+10% this month</p>
+                </Card>
+
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">Active Investors</h3>
+                    <p className="text-3xl font-bold text-gray-900 mb-1">12</p>
+                    <p className="text-sm font-semibold text-green-600">+2 this month</p>
+                </Card>
+            </div>
+
+            <Card className="py-0 overflow-hidden shadow-none mb-4">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                        Search Your Properties
-                    </h2>
-                    <div className="flex gap-4">
-                        <Input
-                            type="text"
-                            placeholder="Search your properties by name, location, or DLD ID..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="flex-1 min-h-12"
-                        />
-                        <Button size={'xl'}>Search</Button>
+                    <div className="px-6 py-4 bg-gradient-to-r from-primary-20 to-primary-dark-20">
+                        <h2 className="text-lg font-bold text-primary-dark">
+                            Your Fractionalized Properties
+                        </h2>
+                    </div>
+                    <div className="divide-y divide-gray-200">
+                        <div className="p-6 grid grid-cols-[2fr_repeat(5,1fr)] gap-4 items-center">
+                            <div>
+                                <h3 className="font-semibold text-gray-dark">Property</h3>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-dark">Total Shares</h3>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-dark">Shares Sold</h3>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-dark">Your Ownership</h3>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-dark">Monthly Income</h3>
+                            </div>
+                            <div className="flex items-center justify-end">
+                                <h3 className="font-semibold text-gray-dark">Actions</h3>
+                            </div>
+                        </div>
+                        {investments.map((investment) => (
+                            <div
+                                key={investment.id}
+                                className="p-6 grid grid-cols-[2fr_repeat(5,1fr)] gap-4 items-center"
+                            >
+                                <div className="col-span-2 flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center text-white text-2xl">
+                                        {investment.icon}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900">
+                                            {investment.name}
+                                        </h3>
+                                        <p className="text-sm text-gray-500">
+                                            {investment.location}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <p className="text-left font-semibold text-gray-900">
+                                        AED {investment.value.toLocaleString()}
+                                    </p>
+                                    <div className="w-32 mt-1">
+                                        <Progress value={investment.ownership} className="h-2" />
+                                    </div>
+                                </div>
+                                <div className="flex items-center">
+                                    <p className="font-semibold text-gray-900">
+                                        {investment.ownership}%
+                                    </p>
+                                </div>
+                                <div className="flex items-center">
+                                    <p className="font-semibold text-green-600">
+                                        +{investment.return}%
+                                    </p>
+                                </div>
+                                <div className="flex items-center justify-end">
+                                    <Button size="sm">Manage</Button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
-
-                <div className="flex flex-wrap gap-4">
-                    <Select
-                        value={areaFilter}
-                        onValueChange={(value: string) => setAreaFilter(value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Areas" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Areas</SelectItem>
-                            <SelectItem value="downtown">Downtown Dubai</SelectItem>
-                            <SelectItem value="marina">Dubai Marina</SelectItem>
-                            <SelectItem value="jbr">Jumeirah Beach Residence</SelectItem>
-                            <SelectItem value="palm">Palm Jumeirah</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    <Select
-                        value={typeFilter ?? ''}
-                        onValueChange={(value: string) => setTypeFilter(value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
-                            <SelectItem value="apartment">Apartment</SelectItem>
-                            <SelectItem value="villa">Villa</SelectItem>
-                            <SelectItem value="townhouse">Townhouse</SelectItem>
-                            <SelectItem value="penthouse">Penthouse</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    <Select
-                        value={statusFilter}
-                        onValueChange={(value: PropertyStatus | '') => setStatusFilter(value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Status</SelectItem>
-                            <SelectItem value="available">Available to Fractionalize</SelectItem>
-                            <SelectItem value="fractionalized">Already Fractionalized</SelectItem>
-                        </SelectContent>
-                    </Select>
+            </Card>
+            <h2 className="text-xl font-semibold text-dark mb-4">Recent Investor Activity</h2>
+            <Card className="py-0 overflow-hidden shadow-none">
+                <div className="divide-y divide-gray-200">
+                    {transactions.length === 0 ? (
+                        <div className="p-8 text-center">
+                            <div className="text-6xl mb-4">📋</div>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                                No Transactions Found
+                            </h3>
+                            <p className="text-gray-500">
+                                No transactions match your selected filter. Try selecting a
+                                different category.
+                            </p>
+                        </div>
+                    ) : (
+                        transactions.map((transaction) => (
+                            <div
+                                key={transaction.id}
+                                className="p-6 hover:bg-primary-20 transition-colors cursor-pointer"
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className={cn(
+                                                'w-10 h-10 rounded-full flex items-center justify-center text-lg',
+                                                transaction.type === 'buy' &&
+                                                    'bg-green-100 text-green-600',
+                                                transaction.type === 'sell' &&
+                                                    'bg-red-100 text-red-600',
+                                                transaction.type === 'transfer' &&
+                                                    'bg-primary/10 text-primary-dark'
+                                            )}
+                                        >
+                                            {transaction.type === 'buy' && '💰'}
+                                            {transaction.type === 'sell' && '💸'}
+                                            {transaction.type === 'transfer' && '🔄'}
+                                            {transaction.type === 'fractionalize' && '📊'}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-gray-900">
+                                                {transaction.title}
+                                            </h3>
+                                            <p className="text-sm text-gray-500">
+                                                {transaction.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="font-semibold text-gray-900">
+                                            {transaction.amount}
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            {transaction.timestamp}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                {filteredProperties.length === 0 ? (
-                    <div className="col-span-full text-center py-12">
-                        <div className="text-6xl mb-4">🏠</div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                            No Properties Found
-                        </h3>
-                        <p className="text-gray-500">
-                            No properties match your search criteria. Try adjusting your filters.
-                        </p>
-                    </div>
-                ) : (
-                    filteredProperties.map((property) => (
-                        <PropertyCard key={property.id} property={property} />
-                    ))
-                )}
-            </div>
+            </Card>
         </div>
     );
 }

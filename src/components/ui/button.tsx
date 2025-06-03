@@ -4,13 +4,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    "inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+    "inline-flex items-center hover:translate-y-[-1px] cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
     {
         variants: {
             variant: {
                 // default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
                 default:
-                    'border border-transparent bg-gradient-to-r from-primary to-primary-dark text-white shadow-xs hover:from-primary/90 hover:to-primary-dark/90 px-6 py-3.5 font-semibold rounded-lg transition-all duration-200 ease-in-out',
+                    'hover:shadow-[0_4px_12px_var(--primary-20)] border border-transparent bg-gradient-to-r from-primary to-primary-dark text-white shadow-xs px-6 py-3.5 font-semibold rounded-lg transition-all duration-200 ease-in-out',
 
                 destructive:
                     'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',

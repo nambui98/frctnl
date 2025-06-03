@@ -58,7 +58,7 @@ export default function PortfolioPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="p-6 hover:border-primary hover:shadow-lg transition-all">
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">
                         Total Portfolio Value
                     </h3>
@@ -66,26 +66,26 @@ export default function PortfolioPage() {
                     <p className="text-sm font-semibold text-green-600">+12.5% this month</p>
                 </Card>
 
-                <Card className="p-6 hover:border-primary hover:shadow-lg transition-all">
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Properties Invested</h3>
                     <p className="text-3xl font-bold text-gray-900 mb-1">8</p>
                     <p className="text-sm font-semibold text-green-600">+2 this month</p>
                 </Card>
 
-                <Card className="p-6 hover:border-primary hover:shadow-lg transition-all">
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Average Ownership</h3>
                     <p className="text-3xl font-bold text-gray-900 mb-1">15.3%</p>
                     <p className="text-sm font-semibold text-green-600">+2.1% this month</p>
                 </Card>
 
-                <Card className="p-6 hover:border-primary hover:shadow-lg transition-all">
+                <Card className="p-6 shadow-none hover:border-primary hover:shadow-lg transition-all">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Monthly Returns</h3>
                     <p className="text-3xl font-bold text-gray-900 mb-1">AED 18,750</p>
                     <p className="text-sm font-semibold text-green-600">+8.2% this month</p>
                 </Card>
             </div>
 
-            <Card className="py-0 overflow-hidden">
+            <Card className="py-0 overflow-hidden shadow-none">
                 <div className="px-6 py-4 bg-gradient-to-r from-primary-20 to-primary-dark-20">
                     <h2 className="text-lg font-bold text-primary-dark">
                         Your Property Investments

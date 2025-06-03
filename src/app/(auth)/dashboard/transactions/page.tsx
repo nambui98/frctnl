@@ -134,7 +134,7 @@ export default function TransactionsPage() {
                 </Button>
             </div>
 
-            <Card className="py-0 overflow-hidden">
+            <Card className="py-0 overflow-hidden shadow-none">
                 <div className="divide-y divide-gray-200">
                     {filteredTransactions.length === 0 ? (
                         <div className="p-8 text-center">
